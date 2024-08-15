@@ -35,8 +35,8 @@ def definir_preco_pizza(escolha):
         return 32.00
     elif escolha == 5:
         return 27.00
- 
-    
+    else:
+        return 0.00  # Caso de escolha inválida
 
 
 def exibir_ingredientes():
@@ -55,28 +55,23 @@ def exibir_ingredientes():
         print(f"{codigo} - {ingrediente}")
     return dicionario_ingredientes
 
-def escolher_ingredientes():
-    dicionario_ingredientes = exibir_ingredientes()
+
+def escolher_ingredientes(dicionario_ingredientes):
     ingredientes_escolhidos = []
     preco_ingrediente = 2.00  # Preço fixo por ingrediente adicional
 
-    print("Escolha até 3 ingredientes adicionais (Digite o código correspondente ou 'sair' para finalizar):")
+    print("Escolha até 3 ingredientes adicionais (Digite o código correspondente ou 'S' para sair):")
     while len(ingredientes_escolhidos) < 3:
         escolha = input(f"Escolha {len(ingredientes_escolhidos) + 1}: ").strip().lower()
-        if escolha == "sair":
+        if escolha == "s":
             break
         if escolha in dicionario_ingredientes:
-            ingrediente = dicionario_ingredientes[escolha]
-            if ingrediente not in ingredientes_escolhidos:
-                ingredientes_escolhidos.append(ingrediente)
-            else:
-                print("Ingrediente já escolhido. Tente novamente.")
+            ingredientes_escolhidos.append(dicionario_ingredientes[escolha])
         else:
             print("Código inválido. Tente novamente.")
 
     return ingredientes_escolhidos, preco_ingrediente * len(ingredientes_escolhidos)
 
-# As demais funções permanecem inalteradas
 
 def escolher_pagamento():
     formas_pagamento = ["Pix", "Dinheiro", "Cartão"]
@@ -93,6 +88,7 @@ def escolher_pagamento():
         except ValueError:
             print("Entrada inválida. Digite um número de 1 a 3.")
 
+
 def gerar_nota_fiscal(pizza, preco_pizza, ingredientes, custo_ingredientes, pagamento):
     total = preco_pizza + custo_ingredientes
     print("\n--- Nota Fiscal ---")
@@ -104,3 +100,19 @@ def gerar_nota_fiscal(pizza, preco_pizza, ingredientes, custo_ingredientes, paga
     print(f"Forma de pagamento: {pagamento}")
     print(f"Total: R$ {total:.2f}")
     print("-------------------\n")
+
+
+# Função principal para execução do programa
+def main():
+    cardapio = exibir_cardapio()
+    pizza, escolha_pizza = escolher_pizza(cardapio)
+    preco_pizza = definir_preco_pizza(escolha_pizza)
+    dicionario_ingredientes = exibir_ingredientes()
+    ingredientes, custo_ingredientes = escolher_ingredientes(dicionario_ingredientes)
+    pagamento = escolher_pagamento()
+    gerar_nota_fiscal(pizza, preco_pizza, ingredientes, custo_ingredientes, pagamento)
+
+
+# Execute a função principal
+if __name__ == "__main__":
+    main()
